@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Test</title>
+    <script>
+        function callJS(){
+        alert("Android调用JS.callJS()方法");
+        }
+        function callAndroidHello(){
+        window.test.hello("js调用了android中的hello方法");
+        }
+        function callAndroidUrl(){
+        document.location="js://webview?arg1=111&arg2=222";
+        }
+        function returnResult(collection){
+        alert("result :"+collection);
+        }
+        function clickprompt(){
+        <!--协议上带有的参数会传入到HashMap和Set中-->
+        var result=prompt("js://demo?arg=1&arg2=2");
+        alert("demo"+result);
+        }
+</script>
+</head>
+<body>
+<input type="button" id="ATJ" onclick="callAndroidHello()" value="JS调用Android">
+<input type="button" value="点击调用协议方法" onclick="callAndroidUrl()">
+<input type="button" value="点击调用prompt" onclick="clickprompt()">
+</body>
+</html>

@@ -1,31 +1,116 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
+
 <head>
-    <meta charset="utf-8">
-    <title>Test</title>
-    <script>
-        function callJS(){
-        alert("Android调用JS.callJS()方法");
-        }
-        function callAndroidHello(){
-        window.test.hello("js调用了android中的hello方法");
-        }
-        function callAndroidUrl(){
-        document.location="js://webview?arg1=111&arg2=222";
-        }
-        function returnResult(collection){
-        alert("result :"+collection);
-        }
-        function clickprompt(){
-        <!--协议上带有的参数会传入到HashMap和Set中-->
-        var result=prompt("js://demo?arg=1&arg2=2");
-        alert("demo"+result);
-        }
-</script>
+    <title>Doughnut Chart</title>
+    <script src="ChartBundle.js"></script>
+    <script src="utils.js"></script>
+    <meta charset="UTF-8" http-equiv="content-type">
 </head>
-<body>
-<input type="button" id="ATJ" onclick="callAndroidHello()" value="JS调用Android">
-<input type="button" value="点击调用协议方法" onclick="callAndroidUrl()">
-<input type="button" value="点击调用prompt" onclick="clickprompt()">
+<body >
+<div id="canvas-holder">
+    <canvas id="chart-area"></canvas>
+</div>
 </body>
+<style>
+    canvas {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+    }
+</style>
+<script language="JavaScript" type="text/javascript">
+    // var j={"伏苹果":3,"苹果":1,"旱苹果":1,"国光苹果":1};
+    // for(var key in j){
+    // 	labelName.push(key);
+    // 	initArr.push(j[key]);
+    // }
+
+    // var dataArr = [{"foodId": "10101"}, {"foodId": "10102"}, {"foodId": "10103"}, {"foodId": "10104"}, {"foodId": "10104"}];
+    // function trans(value) {
+    // 	var initItem = 1;
+    // 	for (var a = 0; a < dataArr.length; a++) {
+    // 		if (a === dataArr.length - 1&&value[a].foodId!==null) {
+    // 			initArr.push(initItem);
+    // 			initItem = 1;
+    // 		} else {
+    // 			if (value[a].foodId !== null) {
+    // 				for (var b = a + 1; b < dataArr.length; b++) {
+    // 					if (dataArr[a].foodId === dataArr[b].foodId) {
+    // 						initItem = initItem + 1;
+    // 						value[b].foodId = null;
+    // 					}
+    // 				}
+    // 				initArr.push(initItem);
+    // 				initItem = 1;
+    // 			}
+    // 		}
+    // 	}
+    // }
+
+    var initArr = [];
+    var labelName=[];
+
+    var config = {
+        type: 'doughnut',
+        data: {
+            datasets: [
+                {
+                    data: [],
+                    backgroundColor: [],
+                    label: 'Dataset 1'
+                }
+            ],
+            labels: []
+        },
+        options: {
+            responsive: true,
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: '近7天饮食构成'
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            }
+        }
+    };
+    function transjson(valueJS) {
+        for (var key in valueJS){
+            labelName.push(key);
+            initArr.push(valueJS[key]);
+        }
+    };
+
+
+function endExe(val){
+    function abc(){
+        initArr=val;
+    }
+        var colorNames = Object.keys(window.chartColors);
+
+        if (initArr.length > 0) {
+            for (var i = 0; i < initArr.length; i++) {
+                config.data.labels.push(labelName[i]);
+
+                // 颜色名字
+                var colorName = colorNames[config.data.datasets[0].data.length % colorNames.length];
+                // 对应名字生成的颜色
+                var newColor = window.chartColors[colorName];
+
+                config.data.datasets.forEach(function (dataset) {
+                    dataset.data.push(initArr[i]);
+                    dataset.backgroundColor.push(newColor);
+                });
+            }
+            // window.myDoughnut.update();
+        }
+        var ctx = document.getElementById('chart-area').getContext('2d');
+        window.myDoughnut = new Chart(ctx, config);
+    }
+}
+</script>
 </html>
